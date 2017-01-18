@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private MyAdapter mAdapter;
+    private List<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +27,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
+        list = getList();
         //创建并设置Adapter
-        mAdapter = new MyAdapter(this, getList());
+        mAdapter = new MyAdapter(this, list);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MyAdapter.OnRecyclerViewItemClickListener() {
             @Override
-            public void onItemClick(View view) {
-                Toast.makeText(MainActivity.this, "aaa", Toast.LENGTH_LONG).show();
+            public void onItemClick(View view, int position) {
+                Toast.makeText(MainActivity.this, list.get(position), Toast.LENGTH_LONG).show();
             }
         });
 

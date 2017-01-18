@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  * Created by songyongmeng on 2017/1/18.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implements View.OnClickListener {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
     private Context context;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     public List<String> list;
@@ -32,22 +31,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTextView.setText(list.get(position));
-        holder.view.setOnClickListener(this);
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取数据
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(v,position);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mOnItemClickListener != null) {
-            //注意这里使用getTag方法获取数据
-            mOnItemClickListener.onItemClick(v);
-        }
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
@@ -63,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
     }
 
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view);
+        void onItemClick(View view, int position);
     }
 
 
