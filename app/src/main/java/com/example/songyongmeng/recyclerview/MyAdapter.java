@@ -18,6 +18,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     public List<String> list;
     private LayoutInflater inflater;
+    private View mHeaderView;
 
     public MyAdapter(Context context, List<String> list) {
         this.context = context;
@@ -25,8 +26,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
         inflater = LayoutInflater.from(context);
     }
 
+    public void setHeaderView(View headerView) {
+        mHeaderView = headerView;
+        notifyItemInserted(0);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(mHeaderView != null) {
+            return new ViewHolder(mHeaderView);
+        }
         return new ViewHolder(inflater.inflate(R.layout.item, parent, false));
     }
 
@@ -56,6 +65,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
 
         public ViewHolder(View view) {
             super(view);
+
+            if (itemView == mHeaderView){
+                return;
+            }
             this.view = view;
             mTextView = (TextView) view.findViewById(R.id.wewe);
         }
